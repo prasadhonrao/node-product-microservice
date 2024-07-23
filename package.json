@@ -1,0 +1,31 @@
+{
+  "name": "node-product-microservice",
+  "version": "1.0.0",
+  "description": "A reference microservice built using NodeJS, Express and MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prasadhonrao/node-product-microservice.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "mongodb",
+    "microservice"
+  ],
+  "author": "Prasad Honrao",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/prasadhonrao/node-product-microservice/issues"
+  },
+  "homepage": "https://github.com/prasadhonrao/node-product-microservice#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
