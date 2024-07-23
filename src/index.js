@@ -117,6 +117,32 @@ app.put('/api/products/:id', (req, res) => {
   return res.status(200).send('Product updated');
 });
 
+// desc   Patch a product by ID
+// route  PATCH /api/products/:id
+// access Public
+app.patch('/api/products/:id', (req, res) => {
+  if (!req.body || Object.keys(req.body).length === 0) {
+    return res.status(400).send({ message: 'Bad Request. No product data provided.' });
+  }
+
+  if (isNaN(req.params.id)) {
+    return res.status(400).send({ message: 'Bad Request. Invalid product ID' });
+  }
+
+  const product = products.find((p) => p.id === parseInt(req.params.id));
+  if (!product) {
+    return res.status(404).send({ message: 'Product not found' });
+  }
+
+  const { name, description, price } = req.body;
+
+  if (name) product.name = name;
+  if (description) product.description = description;
+  if (price) product.price = price;
+
+  return res.status(200).send('Product patched');
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT} in ${NODE_ENV} mode`);
 });
