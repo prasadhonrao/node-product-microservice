@@ -9,11 +9,11 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('Welcome to Node Product Microservice!');
+  res.status(200).send('Welcome to Node Product Microservice!');
 });
 
 app.get('/version', (req, res) => {
-  res.send('1.0.0');
+  res.status(200).send('1.0.0');
 });
 
 app.listen(PORT, () => {
