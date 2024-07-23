@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import products from './data/products.js';
 
 dotenv.config();
 
@@ -14,6 +15,10 @@ app.get('/', (req, res) => {
 
 app.get('/version', (req, res) => {
   res.status(200).send('1.0.0');
+});
+
+app.get('/api/products', (req, res) => {
+  res.status(200).send(products);
 });
 
 app.listen(PORT, () => {
