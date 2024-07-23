@@ -10,15 +10,28 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 const app = express();
 
 app.get('/', (req, res) => {
-  res.status(200).send('Welcome to Node Product Microservice!');
+  return res.status(200).send('Welcome to Node Product Microservice!');
 });
 
 app.get('/version', (req, res) => {
-  res.status(200).send('1.0.0');
+  return res.status(200).send('1.0.0');
 });
 
 app.get('/api/products', (req, res) => {
-  res.status(200).send(products);
+  return res.status(200).send(products);
+});
+
+app.get('/api/products/:id', (req, res) => {
+  // Check if the id is a number
+  if (isNaN(req.params.id)) {
+    return res.status(400).send({ message: 'Bad Request. Invalid product ID' });
+  }
+  const product = products.find((p) => p.id === parseInt(req.params.id));
+  if (product) {
+    return res.status(200).send(product);
+  } else {
+    return res.status(404).send({ message: 'Product not found' });
+  }
 });
 
 app.listen(PORT, () => {
