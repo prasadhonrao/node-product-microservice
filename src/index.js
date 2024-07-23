@@ -66,8 +66,6 @@ app.get('/api/products/:id', (req, res) => {
 // route POST /api/products
 // access Public
 app.post('/api/products', (req, res) => {
-  console.log('create product');
-  // Check if the request body is empty
   if (!req.body) {
     return res.status(400).send({ message: 'Bad Request. No product data' });
   }
@@ -87,6 +85,36 @@ app.post('/api/products', (req, res) => {
   products.push(newProduct);
   console.log(products);
   return res.status(201).send('Product created');
+});
+
+// desc   Update a product by ID
+// route  PUT /api/products/:id
+// access Public
+app.put('/api/products/:id', (req, res) => {
+  if (!req.body || Object.keys(req.body).length === 0) {
+    return res.status(400).send({ message: 'Bad Request. No product data provided.' });
+  }
+
+  if (isNaN(req.params.id)) {
+    return res.status(400).send({ message: 'Bad Request. Invalid product ID' });
+  }
+
+  const product = products.find((p) => p.id === parseInt(req.params.id));
+  if (!product) {
+    return res.status(404).send({ message: 'Product not found' });
+  }
+
+  const { name, description, price } = req.body;
+
+  if (!name) return res.status(400).send({ message: 'Bad Request. Please provide product name' });
+  if (!description) return res.status(400).send({ message: 'Bad Request. Please provide product description' });
+  if (!price) return res.status(400).send({ message: 'Bad Request. Please provide product price' });
+
+  product.name = name;
+  product.description = description;
+  product.price = price;
+
+  return res.status(200).send('Product updated');
 });
 
 app.listen(PORT, () => {
