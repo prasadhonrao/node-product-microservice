@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "A reference microservice built using NodeJS, Express and MongoDB",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +28,7 @@
     "express": "^4.19.2"
   },
   "devDependencies": {
+    "dotenv": "^16.4.5",
     "nodemon": "^3.1.4"
   }
 }
