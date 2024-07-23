@@ -333,7 +333,8 @@
 							"});",
 							""
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -342,7 +343,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+					"raw": "{\n\t\"name\": \"Product 100\",\n    \"description\": \"This is a test description\",\n    \"price\": 9.99\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -350,12 +351,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}/info",
+					"raw": "{{base_url}}/api/products",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
-						"info"
+						"api",
+						"products"
 					]
 				},
 				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."

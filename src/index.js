@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 const app = express();
+app.use(express.json()); // Used to parse JSON bodies
 
 // desc   Get the root API
 // route  GET /
@@ -59,6 +60,33 @@ app.get('/api/products/:id', (req, res) => {
   } else {
     return res.status(404).send({ message: 'Product not found' });
   }
+});
+
+// desc  Create a product
+// route POST /api/products
+// access Public
+app.post('/api/products', (req, res) => {
+  console.log('create product');
+  // Check if the request body is empty
+  if (!req.body) {
+    return res.status(400).send({ message: 'Bad Request. No product data' });
+  }
+
+  const { name, description, price } = req.body;
+  if (!name || !description || !price) {
+    return res.status(400).send({ message: 'Bad Request. Missing required fields' });
+  }
+
+  const newProduct = {
+    id: products.length + 1,
+    name,
+    description,
+    price,
+  };
+
+  products.push(newProduct);
+  console.log(products);
+  return res.status(201).send('Product created');
 });
 
 app.listen(PORT, () => {
