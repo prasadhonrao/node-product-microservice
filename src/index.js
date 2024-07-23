@@ -143,6 +143,25 @@ app.patch('/api/products/:id', (req, res) => {
   return res.status(200).send('Product patched');
 });
 
+// desc   Delete a product by ID
+// route  DELETE /api/products/:id
+// access Public
+app.delete('/api/products/:id', (req, res) => {
+  if (isNaN(req.params.id)) {
+    return res.status(400).send({ message: 'Bad Request. Invalid product ID' });
+  }
+
+  const product = products.find((p) => p.id === parseInt(req.params.id));
+  if (!product) {
+    return res.status(404).send({ message: 'Product not found' });
+  }
+
+  const index = products.indexOf(product);
+  products.splice(index, 1);
+
+  return res.status(200).send('Product deleted');
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT} in ${NODE_ENV} mode`);
 });
