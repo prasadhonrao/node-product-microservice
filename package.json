@@ -25,7 +25,8 @@
   },
   "homepage": "https://github.com/prasadhonrao/node-product-microservice#readme",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "express-validator": "^7.1.0"
   },
   "devDependencies": {
     "dotenv": "^16.4.5",

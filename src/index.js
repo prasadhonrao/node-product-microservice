@@ -1,6 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import products from './data/products.js';
+import {
+  validateProductId,
+  validateProductName,
+  validateProductDescription,
+  validateProductPrice,
+} from './middleware/productValidator.js';
+import { validationResult } from 'express-validator';
 
 dotenv.config();
 
@@ -49,11 +56,12 @@ app.get('/api/products/search', (req, res) => {
 // desc   Get a product by ID
 // route  GET /api/products/:id
 // access Public
-app.get('/api/products/:id', (req, res) => {
-  // Check if the id is a number
-  if (isNaN(req.params.id)) {
-    return res.status(400).send({ message: 'Bad Request. Invalid product ID' });
+app.get('/api/products/:id', validateProductId, (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
   }
+
   const product = products.find((p) => p.id === parseInt(req.params.id));
   if (product) {
     return res.status(200).send(product);
@@ -65,15 +73,13 @@ app.get('/api/products/:id', (req, res) => {
 // desc  Create a product
 // route POST /api/products
 // access Public
-app.post('/api/products', (req, res) => {
-  if (!req.body) {
-    return res.status(400).send({ message: 'Bad Request. No product data' });
+app.post('/api/products', validateProductName, validateProductDescription, validateProductPrice, (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
   }
 
   const { name, description, price } = req.body;
-  if (!name || !description || !price) {
-    return res.status(400).send({ message: 'Bad Request. Missing required fields' });
-  }
 
   const newProduct = {
     id: products.length + 1,
@@ -90,43 +96,38 @@ app.post('/api/products', (req, res) => {
 // desc   Update a product by ID
 // route  PUT /api/products/:id
 // access Public
-app.put('/api/products/:id', (req, res) => {
-  if (!req.body || Object.keys(req.body).length === 0) {
-    return res.status(400).send({ message: 'Bad Request. No product data provided.' });
+app.put(
+  '/api/products/:id',
+  validateProductId,
+  validateProductName,
+  validateProductDescription,
+  validateProductPrice,
+  (req, res) => {
+    const product = products.find((p) => p.id === parseInt(req.params.id));
+    if (!product) {
+      return res.status(404).send({ message: 'Product not found' });
+    }
+
+    const { name, description, price } = req.body;
+
+    if (!name) return res.status(400).send({ message: 'Bad Request. Please provide product name' });
+    if (!description) return res.status(400).send({ message: 'Bad Request. Please provide product description' });
+    if (!price) return res.status(400).send({ message: 'Bad Request. Please provide product price' });
+
+    product.name = name;
+    product.description = description;
+    product.price = price;
+
+    return res.status(200).send('Product updated');
   }
-
-  if (isNaN(req.params.id)) {
-    return res.status(400).send({ message: 'Bad Request. Invalid product ID' });
-  }
-
-  const product = products.find((p) => p.id === parseInt(req.params.id));
-  if (!product) {
-    return res.status(404).send({ message: 'Product not found' });
-  }
-
-  const { name, description, price } = req.body;
-
-  if (!name) return res.status(400).send({ message: 'Bad Request. Please provide product name' });
-  if (!description) return res.status(400).send({ message: 'Bad Request. Please provide product description' });
-  if (!price) return res.status(400).send({ message: 'Bad Request. Please provide product price' });
-
-  product.name = name;
-  product.description = description;
-  product.price = price;
-
-  return res.status(200).send('Product updated');
-});
+);
 
 // desc   Patch a product by ID
 // route  PATCH /api/products/:id
 // access Public
-app.patch('/api/products/:id', (req, res) => {
+app.patch('/api/products/:id', validateProductId, (req, res) => {
   if (!req.body || Object.keys(req.body).length === 0) {
     return res.status(400).send({ message: 'Bad Request. No product data provided.' });
-  }
-
-  if (isNaN(req.params.id)) {
-    return res.status(400).send({ message: 'Bad Request. Invalid product ID' });
   }
 
   const product = products.find((p) => p.id === parseInt(req.params.id));
@@ -146,11 +147,7 @@ app.patch('/api/products/:id', (req, res) => {
 // desc   Delete a product by ID
 // route  DELETE /api/products/:id
 // access Public
-app.delete('/api/products/:id', (req, res) => {
-  if (isNaN(req.params.id)) {
-    return res.status(400).send({ message: 'Bad Request. Invalid product ID' });
-  }
-
+app.delete('/api/products/:id', validateProductId, (req, res) => {
   const product = products.find((p) => p.id === parseInt(req.params.id));
   if (!product) {
     return res.status(404).send({ message: 'Product not found' });
