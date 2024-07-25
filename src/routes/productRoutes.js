@@ -7,7 +7,7 @@ import {
   validateProductName,
   validateProductDescription,
   validateProductPrice,
-} from '../middleware/productValidator.js';
+} from '../middlewares/productValidator.js';
 
 const productRouter = express.Router();
 
