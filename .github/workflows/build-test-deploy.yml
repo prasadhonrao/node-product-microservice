@@ -8,33 +8,57 @@ on:
 
 jobs:
   build:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
+
+    # Define a matrix strategy to run the job on multiple Node.js versions.
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x, 20.x]
     steps:
+      # Step to checkout the repository
       - name: Checkout repo
         uses: actions/checkout@v4
+
+      # Step to set up the specified Node.js version from the matrix.
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: npm install
-      - run: npm run build --if-present
+
+      # Step to install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step to build the project
+      - name: Build project
+        run: npm run build --if-present
   test:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
     needs: build
+
+    # Define a matrix strategy to run the job on multiple Node.js versions.
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x, 20.x]
     steps:
+      # Step to checkout the repository
       - name: Checkout repo
         uses: actions/checkout@v4
+
+      # Step to set up the specified Node.js version from the matrix.
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: npm install
-      - run: npm test
+
+      # Step to install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step to run tests
+      - name: Run tests
+        run: npm test
