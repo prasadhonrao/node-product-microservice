@@ -1,9 +1,4 @@
-import { body, param } from 'express-validator';
-
-const validateProductId = param('id')
-  .trim()
-  .isInt({ min: 1 }) // Ensure the ID is an integer greater than 0
-  .withMessage('Invalid product ID. Must be an integer greater than 0.');
+import { body } from 'express-validator';
 
 const validateProductName = body('name')
   .trim()
@@ -13,11 +8,7 @@ const validateProductName = body('name')
   .withMessage('Product name must be a string')
   .isLength({ min: 3, max: 50 })
   .withMessage('Product name must be between 3 and 50 characters')
-  .escape()
-  .if(
-    (value, { req }) =>
-      req.method === 'POST' || req.method === 'PUT' || (req.method === 'PATCH' && req.body.name !== undefined)
-  );
+  .escape();
 
 const validateProductDescription = body('description')
   .trim()
@@ -27,11 +18,7 @@ const validateProductDescription = body('description')
   .withMessage('Product description must be a string')
   .isLength({ min: 10, max: 250 })
   .withMessage('Product description must be between 10 and 250 characters')
-  .escape()
-  .if(
-    (value, { req }) =>
-      req.method === 'POST' || req.method === 'PUT' || (req.method === 'PATCH' && req.body.description !== undefined)
-  );
+  .escape();
 
 const validateProductPrice = body('price')
   .trim()
@@ -41,10 +28,6 @@ const validateProductPrice = body('price')
   .withMessage('Product price must be a number')
   .isFloat({ min: 0.01 })
   .withMessage('Product price must be a positive number')
-  .escape()
-  .if(
-    (value, { req }) =>
-      req.method === 'POST' || req.method === 'PUT' || (req.method === 'PATCH' && req.body.price !== undefined)
-  );
+  .escape();
 
-export { validateProductId, validateProductName, validateProductDescription, validateProductPrice };
+export { validateProductName, validateProductDescription, validateProductPrice };

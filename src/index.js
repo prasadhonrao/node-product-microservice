@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import productRouter from './routes/productRoutes.js';
+import connectDB from './config/db.js';
 
 dotenv.config();
 
@@ -8,6 +9,8 @@ const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 const app = express();
+connectDB();
+
 app.use(express.json()); // Used to parse JSON bodies
 app.use('/api/products', productRouter);
 
